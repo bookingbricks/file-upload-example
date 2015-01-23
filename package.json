@@ -1,0 +1,27 @@
+{
+  "name": "file-upload-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bookingbricks/file-upload-example.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bookingbricks/file-upload-example/issues"
+  },
+  "homepage": "https://github.com/bookingbricks/file-upload-example",
+  "dependencies": {
+    "aws-sdk": "^2.1.7",
+    "blueimp-file-upload": "^9.9.2",
+    "body-parser": "^1.10.2",
+    "express": "^4.11.1",
+    "jquery": "^2.1.3",
+  }
+}
