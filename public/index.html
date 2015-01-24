@@ -18,28 +18,21 @@ $(function () {
 		add: function (e, data) {
 			$.each(data.files, function (index, file) {
 				data.context = $('<p/>').text('Uploading...').appendTo(document.body);
-				console.log(file);
 				$.ajax({
 					url: '/s',
 					type: 'POST',
-					data: {name: file.name, size: file.size},
+					data: {name: file.name, size: file.size, type:file.type},
 				}).success(function(res){
-					var formData = new FormData();
-					formData.append('file', file);
-					console.log(res.url)
 					$.ajax({
 						url: res.url,
 						type: 'PUT',
-						//data: "formData",
+						data: file,
 						processData: false,
-  						contentType: false,
+  						contentType: file.type,
 					}).success(function(res){
-						console.log("asd")
+						console.log('Done');
 					});
-
 					$('<p/>').text(file.name).appendTo(document.body);
-					//data.url = res.url;
-					//data.submit();
 				}).error(function(){
 					console.log("error");
 				});

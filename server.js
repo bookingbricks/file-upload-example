@@ -3,8 +3,8 @@ var app = express()
 var AWS = require('aws-sdk');
 var bodyParser = require('body-parser');
 
-var AWS_ACCESS_KEY = 'AWS_ACCESS_KEY';
-var AWS_SECRET_KEY = 'AWS_SECRET_KEY';
+var AWS_ACCESS_KEY = 'XXXX';
+var AWS_SECRET_KEY = 'XXXX';
 AWS.config.update({accessKeyId: AWS_ACCESS_KEY, secretAccessKey: AWS_SECRET_KEY});
 AWS.config.region = 'eu-west-1';
 
@@ -19,7 +19,7 @@ app.use(bodyParser.json())
 
 app.post('/s', function (req, res) {
 	var s3 = new AWS.S3();
-	var params = {Bucket: 'BUCKETNAME', Key: req.body.name};
+	var params = {Bucket: 'BUCKETNAME', Key: req.body.name, ContentType: req.body.type};
 	s3.getSignedUrl('putObject', params, function(err, url) {
 		if(err) console.log(err);
 		res.json({url: url});
