@@ -2,28 +2,22 @@ var express = require('express')
 var app = express()
 var AWS = require('aws-sdk');
 var bodyParser = require('body-parser');
+var AwsS3Form = require('aws-s3-form');
 
-var AWS_ACCESS_KEY = 'XXXX';
-var AWS_SECRET_KEY = 'XXXX';
-AWS.config.update({accessKeyId: AWS_ACCESS_KEY, secretAccessKey: AWS_SECRET_KEY});
-AWS.config.region = 'eu-west-1';
+var formGen = new AwsS3Form({
+    accessKeyId:        "XXX",
+    secretAccessKey:    "XXX",
+    region:             "eu-west-1",
+    bucket:             "jontelm",
+    redirectUrlTemplate:"",
+    keyPrefix: 			"users/44/"
+  });
 
 app.use("/public",express.static(__dirname + '/public'));
 app.use("/node_modules",express.static(__dirname + '/node_modules'));
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
-
-// parse application/json
-app.use(bodyParser.json())
-
 app.post('/s', function (req, res) {
-	var s3 = new AWS.S3();
-	var params = {Bucket: 'BUCKETNAME', Key: req.body.name, ContentType: req.body.type};
-	s3.getSignedUrl('putObject', params, function(err, url) {
-		if(err) console.log(err);
-		res.json({url: url});
-	});
+	res.json(formGen.create(""));
 })
 
 var server = app.listen(3000, function () {

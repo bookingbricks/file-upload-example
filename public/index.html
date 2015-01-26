@@ -1,42 +1,47 @@
-<!DOCTYPE HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
 	<meta charset="utf-8">
 	<title>jQuery File Upload Example</title>
 </head>
 <body>
-	<input id="fileupload" type="file" name="files[]" multiple>
+	<form>
+		<input id="fileupload" type="file" name="file" accept="image/*" multiple>
+	</form>
+	<h1>hej</h1>
 </body>
 <script src="/node_modules/jquery/dist/jquery.min.js"></script>
 <script src="/node_modules/blueimp-file-upload/js/vendor/jquery.ui.widget.js"></script>
 <script src="/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js"></script>
 <script src="/node_modules/blueimp-file-upload/js/jquery.fileupload.js"></script>
+<script src="/node_modules/superagent/superagent.js"></script>
 <script>
-$(function () {
+$( document ).ready(function() {
+	var url = window.location.hostname === 'blueimp.github.io' ?
+	'//jquery-file-upload.appspot.com/' : 'server/php/';
+
 	$('#fileupload').fileupload({
-		dataType: 'json',
+		url: url,
+		forceIframeTransport: true,    // VERY IMPORTANT.  you will get 405 Method Not Allowed if you don't add this.
 		add: function (e, data) {
-			$.each(data.files, function (index, file) {
-				data.context = $('<p/>').text('Uploading...').appendTo(document.body);
+			console.log("add");
+			if (data.autoUpload || data.autoUpload !== false) {
 				$.ajax({
-					url: '/s',
-					type: 'POST',
-					data: {name: file.name, size: file.size, type:file.type},
-				}).success(function(res){
-					$.ajax({
-						url: res.url,
-						type: 'PUT',
-						data: file,
-						processData: false,
-  						contentType: file.type,
-					}).success(function(res){
-						console.log('Done');
-					});
-					$('<p/>').text(file.name).appendTo(document.body);
-				}).error(function(){
-					console.log("error");
+					url:"/s",  
+					type: "POST",
+					success:function(response) {
+						$.each(data.files, function (index, file) {
+							data.process().done(function () {
+								var fields = response.fields;
+								fields.key = fields.key + file.name;
+								data.url = response.action;
+								data.formData = fields;
+								data.submit();
+							});
+						}); 
+					}
 				});
-			});
+			}
 		}
 	});
 });
