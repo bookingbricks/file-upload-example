@@ -13,7 +13,7 @@ npm server.js
 
 -----------------------------------
 
-Don't forget to add a cross-originC(CORS) rule to your AWS S3 CORS configuration to prevent the cross-origin request error even if it's hosted from EC2 and not localhost:
+Don't forget to add a cross-origin(CORS) rule to your AWS S3 CORS configuration to prevent the cross-origin request error even if it's hosted from EC2 and not localhost:
 
     <CORSRule>
         <AllowedOrigin>http://localhost:8080</AllowedOrigin>
